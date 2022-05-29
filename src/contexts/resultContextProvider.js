@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
-import IpChange from "../components/ipChange";
-import { Navigate } from "react-router-dom";
 const ResultsContext = createContext();
 
 const baseUrl = "https://google-search3.p.rapidapi.com/api/v1";
@@ -22,28 +20,29 @@ export const ResultsContextProvider = ({ children }) => {
 
   const getResults = async (type) => {
     setIsLoading(true);
+    const response = await fetch(`${baseUrl}${type}`, {
+      method: "GET",
+      headers: headers,
+    });
 
-    // const response = await fetch(`${baseUrl}${type}`, {
-    //   method: "GET",
-    //   headers: headers,
-    // });
-
-    axios
-      .get(`${baseUrl}${type}`, {
-        method: "GET",
-        headers: headers,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setResults(response.data);
-        } else {
-          console.log("something happend wrong", response.status);
-        }
-      })
-      .catch((err) => {
-        console.log(err.code);
-      });
-
+    // axios
+    //   .get(`${baseUrl}${type}`, {
+    //     method: "GET",
+    //     headers: headers,
+    //   })
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       setResults(response.data);
+    //       setIsLoading(false);
+    //     } else {
+    //       console.log("something happend wrong", response.status);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.code);
+    //   });
+    const data = await response.json();
+    setResults(data);
     setIsLoading(false);
   };
 
